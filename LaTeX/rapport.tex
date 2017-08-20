@@ -1,0 +1,228 @@
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = LuaLaTeX
+\documentclass[12pt,a4paper]{report}
+
+%================ Packages de mise en forme du document ================ %
+\usepackage[width=14.00cm, top=3.50cm, bottom=3.50cm]{geometry}
+\usepackage{lscape}
+\usepackage{luatextra}
+\usepackage[francais]{babel}
+\usepackage{listings}
+\usepackage{tocloft}
+\usepackage{wrapfig}
+\usepackage{pagecolor}
+\usepackage{graphicx}
+\usepackage[center]{caption}
+\usepackage{subcaption}
+\usepackage{ifthen}
+
+%==================== Packages pour la page de garde =================== %
+\usepackage{tikz}
+
+%================= Package pour produire des lettrines ================= %
+\usepackage{lettrine}
+
+%================= Package pour la gestion des entrées bibio site web ================= %
+\usepackage{url}
+
+%================= Package pour les titres ================= %
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]{\bf\Huge}{\thechapter}{2pc}{}{}
+
+\usepackage{fancyhdr}
+
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
+\renewcommand{\thesubsection}{\arabic{chapter}.\arabic{section}.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\alph{subsubsection}}
+
+\renewcommand{\cftchapleader}{\dotfill}
+\renewcommand{\cftsecleader}{\dotfill}
+\renewcommand{\cftsubsecleader}{\dotfill}
+\renewcommand{\cftsubsubsecleader}{\dotfill}
+
+\renewcommand{\labelitemi}{\textbullet}
+\renewcommand{\labelitemii}{\textbullet}
+\pagestyle{fancy}
+\skip\footins=1cm
+\footskip=2.5cm
+
+\newlength\mylen
+\setlength\mylen{\dimexpr1in+\hoffset+18pt\relax}
+
+\setlength\headheight{13.6pt}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\myleftmark}{\thechapter~\leftmark}
+
+\newcounter{mypart}
+\setcounter{mypart}{0}
+\renewcommand{\themypart}{\Roman{mypart}}
+\renewcommand{\part}[1]{ %
+	\newpage
+	\setcounter{chapter}{0}
+	\addcontentsline{toc}{part}{ %
+		\hspace*{2cm}#1\vspace*{\baselineskip}}
+	\thispagestyle{empty}
+	\refstepcounter{mypart}
+	\vspace*{0.4\textheight}
+	{\LARGE %
+		\begin{flushright}
+			\textbf{\textit{Partie \themypart~{--}~} #1}
+		\end{flushright}
+	}
+	\newpage
+}
+
+
+\makeatletter
+
+\fancyhf{}
+\fancyhead[C]{%
+	\begin{tikzpicture}[overlay]
+	\fill[black] (-0.5\paperwidth,3) rectangle (0.5\paperwidth,0.8);
+	\node[anchor=west,font=\sffamily\bfseries\large,color=white] at (-10,1.5) {\myleftmark};
+	\node[anchor=east,font=\sffamily\bfseries\large,color=white] at (10,1.5) {
+		\ifthenelse{
+			\isundefined{\@institute}}{}{ %
+			\@institute		
+		}
+	};
+	\end{tikzpicture}%
+}
+\fancyfoot[C]{%
+	\begin{tikzpicture}[overlay]
+	\fill[black] (-0.5\paperwidth,0.4) rectangle (0.5\paperwidth,-35pt);
+	\node[anchor=west,font=\sffamily\bfseries,color=white] at (-10,-0.1) {};
+	\node[anchor=east,font=\sffamily\bfseries,color=white] at (10,-0.1) {\thepage};
+	\end{tikzpicture}%
+}
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\fancyfoot[C]{%
+		\begin{tikzpicture}[overlay]
+		\fill[black] (-0.5\paperwidth,0.4) rectangle (0.5\paperwidth,-35pt);
+		\node[anchor=west,font=\sffamily\bfseries,color=white] at (-10,-0.1) {};
+		\node[anchor=east,font=\sffamily\bfseries,color=white] at (10,-0.1) {\thepage};
+		\end{tikzpicture}%
+	}
+}
+
+\renewcommand{\labelitemi}{\textbullet}
+
+\parindent=0pt
+\pagestyle{fancy}
+\renewcommand\chaptermark[1]{\markboth{#1}{}}
+\renewcommand\sectionmark[1]{\markright{\thesection\ #1}}
+
+\setcounter{secnumdepth}{0}
+\setcounter{tocdepth}{1}
+
+\newcommand{\institute}[1]{
+	\newcommand{\@institute}{#1}
+}
+
+\newcommand{\subtitle}[1]{ %
+	\newcommand{\@subtitle}{
+		\begin{LARGE}#1\end{LARGE}
+	}
+}
+
+\renewcommand*{\maketitle}{ %
+	\begin{titlepage}
+		\definecolor{background}{rgb}{0.85, 0.85, 0.85}
+		\newpagecolor{background}
+		\vspace*{1cm}
+		\begin{center}
+			\definecolor{bordeau}{rgb}{0.3,0,0}
+			\begin{tikzpicture}[rounded corners=25pt]
+			\draw(0,0) node[white,inner color=bordeau,outer color=bordeau]{ %
+				\begin{minipage}{\textwidth}
+				\begin{center}
+				\vspace*{1cm}
+				\begin{Huge}
+				\textbf{\@title}\\[0.5cm]
+				\end{Huge}
+				\ifthenelse{
+					\isundefined{\@subtitle}}{}{ %
+					\@subtitle		
+				}
+				\vspace*{1cm}					
+				\end{center}
+				\end{minipage}
+			};
+			\end{tikzpicture}
+			\\[2cm]
+			\ifthenelse{
+				\isundefined{\@author}}{}{ %
+				\begin{Large}
+					\textit{Ce rapport vous est offert par}\\[2em]
+					\@author\\[.5em]
+				\end{Large}	
+			}
+			\vspace*{\baselineskip}\vfill
+			\begin{large}
+				\today
+			\end{large}
+		\end{center}
+	\end{titlepage}
+	\restorepagecolor
+}
+
+\newcommand{\place}[1]{
+	\newcommand{\@place}{à #1}
+}
+
+\newcommand{\finalpage}{
+	\clearpage
+	\pagestyle{empty}
+	\vspace*{0.95\textheight}
+	\ifthenelse{
+		\isundefined{\@place}}{ %
+		\centering\small{Le \today{}}
+	}{\centering\small{Le \today{} \@place}}
+}
+
+\let\@tableofcontentsbckp=\tableofcontents
+\renewcommand{\tableofcontents}{ %
+	\renewcommand\contentsname{Sommaire}
+	\addtocontents{toc}{~\hfill\textbf{Page}\par}
+	\setlength{\cftchapnumwidth}{2.5em}
+	\setlength{\cftbeforechapskip}{3.5pt}
+	\setlength{\cftbeforesecskip}{1.5pt}
+	\renewcommand{\cftdotsep}{2}
+	\@tableofcontentsbckp 
+	\thispagestyle{empty}
+	\newpage
+}
+\makeatother
+
+\newenvironment{intropage}{
+	\let\oldmyleftmark=\myleftmark
+	\chapter*{Introduction}
+	\renewcommand{\myleftmark}{Introduction}
+	\addcontentsline{toc}{chapter}{Introduction}
+}{\newpage}
+
+
+\begin{document}
+	\title{TITLE}
+	\author{AUTHOR}
+	\institute{INSTITUTE}
+	\place{PLACE}
+	
+	\maketitle
+	%============================================================================
+	\tableofcontents
+	%============================================================================
+	\setcounter{page}{2}
+	\begin{intropage}
+		
+	\end{intropage}
+	
+	%============================================================================
+	\chapter{Titre chapitre}
+	% \input{}
+	%============================================================================
+	\finalpage
+\end{document}

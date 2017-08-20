@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Use in conjunction with
+# git config --global alias.upstream '!bash -c "gitupstream"'
+
+if [[ -z $(git config remote.upstream.defaultbranch) ]]; then
+	echo "Please set 'git config remote.upstream.defaultbranch <upstream_branch>'"
+	return 1
+else
+	DEFAULT_BRANCH=$(git config remote.upstream.defaultbranch)
+fi
+
+if [[ -z $(git remote -v | grep upstream) ]]; then
+	echo "Please set 'upstream' remote repo"
+	return 1
+fi
+
+git fetch upstream
+
+if [[ -z $(git branch -a | grep "upstream/$DEFAULT_BRANCH") ]]; then
+	echo "There is no $DEFAULT_BRANCH on upstream. Maybe it does not exist, but it's likely that remote 'upstream' repo is not correctly set"
+	return 1
+fi
+
+if [[ $(git rev-parse --is-inside-work-tree) ]]; then
+	CURR_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+	git checkout $DEFAULT_BRANCH
+	git pull upstream $DEFAULT_BRANCH
+	git push origin $DEFAULT_BRANCH
+	git checkout $CURR_BRANCH
+else
+       echo $(git rev-parse --is-inside-work-tree)
+fi

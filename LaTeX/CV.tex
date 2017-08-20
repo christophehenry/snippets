@@ -1,0 +1,66 @@
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = LuaLaTeX
+\documentclass[11pt,a4paper,roman]{moderncv}
+\usepackage{luatextra}
+\usepackage[francais]{babel}
+\moderncvtheme[blue]{casual}
+\usepackage[scale=.75]{geometry}
+\usepackage{ragged2e}
+
+\firstname{}
+\familyname{}
+\address{ADD}{}
+\mobile{}
+\email{}
+\title{}
+\homepage{}
+%\photo[70pt][0pt]{ESIEE}
+
+\begin{document}
+
+\newlength{\picwidth}
+\setlength{\picwidth}{5cm}
+\newlength{\picmargin}
+\setlength{\picmargin}{1cm}
+\setlength{\hintscolumnwidth}{3cm}
+\recomputecvlengths
+
+\makecvtitle
+
+\section{Compétences}
+
+\subsection{Solides connaissances}
+\cvdoubleitem{}{}{}{}
+
+\subsection{Bonnes connaissances}
+\cvdoubleitem{}{}{}{}
+
+\section{Études}
+
+\cventry{}{}{}{}{}
+
+
+\section{Expérience professionnelle}
+
+\cventry{}{}{}{}{}
+
+\section{Centres d'intérêt}
+\cvitem{}{}{}{}
+
+\clearpage
+
+% ========================================================================== %
+% ================================= Lettre ================================== %
+% ========================================================================== %
+	
+	
+\recipient{}{\vspace*{2.5cm}} % Letter recipient
+\date{Le \today}
+\opening{}
+\closing{}
+\enclosure[Pièce jointe]{curriculum vit\ae{}}
+	
+\makelettertitle\justifying
+	
+\makeletterclosing
+\end{document}
