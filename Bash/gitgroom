@@ -1,0 +1,19 @@
+#!/bin/bash
+# Removes branch that have been deleted on origin
+# git config --global alias.groom '!bash -c "gitgroom"'
+
+OLDIFS=$IFS
+IFS=$'\n'
+for line in $(git fetch origin --prune 2>&1); do
+    echo $line
+    if [[ $line =~ [[:space:]]*-[[:space:]]*\[[^]]*\][[:space:]]*\(.*\)[[:space:]]*-\>[[:space:]]*origin/ ]]; then
+        BRANCH="${line/*-> origin\//}"
+        CURR_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+        if [[ $CURR_BRANCH =~ $BRANCH ]]; then
+            echo "Trying to remove current branch $BRANCH; checking out on master"
+            git checkout -f master
+        fi
+        git branch -D $BRANCH
+    fi
+done
+IFS=$OLDIFS
