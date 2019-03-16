@@ -2,6 +2,7 @@
 # Removes branch that have been deleted on origin
 # git config --global alias.groom '!bash -c "gitgroom"'
 
+DEFAULT_BRANCH=$(git config remote.upstream.defaultbranch)
 OLDIFS=$IFS
 IFS=$'\n'
 for line in $(git fetch origin --prune 2>&1); do
@@ -11,7 +12,11 @@ for line in $(git fetch origin --prune 2>&1); do
         CURR_BRANCH=$(git rev-parse --abbrev-ref HEAD)
         if [[ $CURR_BRANCH =~ $BRANCH ]]; then
             echo "Trying to remove current branch $BRANCH; checking out on master"
-            git checkout -f master
+            if [[ -z $DEFAULT_BRANCH ]]; then
+                git checkout -f master
+            else
+                git checkout -f $DEFAULT_BRANCH
+            fi
         fi
         git branch -D $BRANCH
     fi
